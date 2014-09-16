@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>DevHubアイコンメーカー</title>
+    <style>
+        @import url(KakomiB.ttf=Kakomi);
+        .canv{
+            width: 24px;
+            height: 24px;
+            border: solid 1px black;
+        }
+
+    </style>
+    <link rel="stylesheet" href="css/stylesheet.css"/>
+</head>
+<body>
+    <h1>DevHubIcon</h1>
+    <canvas class="canv" width="24" height="24"></canvas>
+
+
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script>
+        var icons = [
+            "ico_bear.gif",
+            "ico_cat1.gif",
+            "ico_cat2.gif",
+            "ico_cat3.gif",
+            "ico_caw.gif",
+            "ico_elephant.gif",
+            "ico_flog.gif",
+            "ico_ganesha.gif",
+            "ico_panda.gif",
+            "ico_pig.gif",
+            "ico_rhino.gif",
+            "ico_whole1.gif",
+            "ico_whole2.gif"
+        ];
+
+        window.onload = function(){
+            //描画を試行する
+            //リトライ回数
+            var cnt = 0;
+            function tryDraw(){
+                if(!loaded() && cnt<30){
+                    setTimeout(tryDraw, 100);
+                    cnt++;
+                }else{
+                    draw();
+                }
+            }
+
+            //webフォントのロード状況を確認する
+            var c1 = document.createElement("canvas");
+            var c2 = c1.cloneNode(false);
+            var ctx1 = c1.getContext("2d");
+            var ctx2 = c2.getContext("2d");
+            //webフォントと代替フォントとを指定．
+            //NOTE:monoscopeだとwebkitでリロード時に失敗する
+            ctx1.font = "normal 10px 'kakomibregular', serif";
+            ctx2.font = "normal 10px serif";
+            var text = "this is test text.";
+            function loaded(){
+                //テキスト幅を比較する
+                //webフォントが利用可能となると，フォント幅が一致する．
+                var tm1 = ctx1.measureText(text);
+                var tm2 = ctx2.measureText(text);
+                return tm1.width != tm2.width;
+            }
+
+            //実際の描画処理を行う
+            function draw(){
+                var canvas = $('canvas')[0];
+                var ctx = canvas.getContext('2d');
+                ctx.font = "12pt 'kakomibregular'";
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                ctx.fillText("ABCD", 12, 10, 24);
+                document.body.appendChild(canvas);
+            }
+
+            //処理開始
+            tryDraw();
+        };
+    </script>
+</body>
+</html>
