@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>DevHubアイコンメーカー</title>
     <style>
-        @import url(KakomiB.ttf=Kakomi);
         .canv{
             width: 24px;
             height: 24px;
@@ -28,7 +27,22 @@
             Font: <input type="text" v-model="fontColor"/>
         </p>
 
+        <p>
+            <select v-model="shadowColor">
+                <option value="black">black</option>
+                <option value="white">white</option>
+            </select>
+        </p>
+
         <p>{{message}}</p>
+
+        <p>
+            ICON:
+            <select v-model="icon" id="">
+                <option v-repeat="iconfile : icons">{{iconfile}}</option>
+            </select>
+        </p>
+
 
     </div>
 
@@ -45,8 +59,26 @@
             el: "#main",
             data: {
                 iconText: "Taro",
-                bgColor: "green",
-                fontColor: "black"
+                bgColor: "lightgray",
+                fontColor: "white",
+                icons : [
+                    "",
+                    "ico_bear.gif",
+                    "ico_cat1.gif",
+                    "ico_cat2.gif",
+                    "ico_cat3.gif",
+                    "ico_caw.gif",
+                    "ico_elephant.gif",
+                    "ico_flog.gif",
+                    "ico_ganesha.gif",
+                    "ico_panda.gif",
+                    "ico_pig.gif",
+                    "ico_rhino.gif",
+                    "ico_whole1.gif",
+                    "ico_whole2.gif"
+                ],
+                icon: "",
+                shadowColor: "black"
             },
             ready:function(){
                 var self = this;
@@ -56,10 +88,40 @@
                     var ctx = canvas.getContext('2d');
                     ctx.fillStyle = self.bgColor;
                     ctx.fillRect(0,0,24,24);
-                    ctx.font = "12pt 'kakomibregular'";
-                    ctx.fillStyle = self.fontColor;
-                    ctx.textAlign = "left";
-                    ctx.fillText(self.iconText, 2, 22, 24);
+
+                    if(self.icon){
+                        var img = new Image();
+                        img.src = "icons/" + self.icon;
+
+                        img.onload = (function(){
+                            ctx.drawImage(img, 12 - img.width / 2, 12 - img.height / 2);
+
+                            ctx.font = "7pt 'visitor_tt1_brkregular'";
+                            ctx.fillStyle = self.fontColor;
+
+                            ctx.shadowColor = self.shadowColor;
+                            ctx.shadowOffsetX = 1;
+                            ctx.shadowOffsetY = 1;
+                            ctx.shadowBlur = 0;
+
+                            ctx.textAlign = "left";
+                            ctx.fillText(self.iconText, 2, 22, 24);
+
+                        });
+                    }else{
+
+                        ctx.font = "7pt 'visitor_tt1_brkregular'";
+                        ctx.fillStyle = self.fontColor;
+
+                        ctx.shadowColor = self.shadowColor;
+                        ctx.shadowOffsetX = 1;
+                        ctx.shadowOffsetY = 1;
+                        ctx.shadowBlur = 0;
+
+                        ctx.textAlign = "left";
+                        ctx.fillText(self.iconText, 2, 22, 24);
+                    }
+
                 }
 
                 //描画を試行する
@@ -81,8 +143,8 @@
                 var ctx2 = c2.getContext("2d");
                 //webフォントと代替フォントとを指定．
                 //NOTE:monoscopeだとwebkitでリロード時に失敗する
-                ctx1.font = "normal 10px 'kakomibregular', serif";
-                ctx2.font = "normal 10px serif";
+                ctx1.font = "normal 7pt 'visitor_tt1_brkregular', serif";
+                ctx2.font = "normal 7pt serif";
                 var text = "this is test text.";
                 function loaded(){
                     //テキスト幅を比較する
@@ -99,25 +161,19 @@
                 this.$watch("iconText", function(){
                     draw();
                 });
+                this.$watch("bgColor", function(){
+                    draw();
+                });
+                this.$watch("fontColor", function(){
+                    draw();
+                });
+                this.$watch("icon", function(){
+                    draw();
+                });
 
             }
         });
 
-        var icons = [
-            "ico_bear.gif",
-            "ico_cat1.gif",
-            "ico_cat2.gif",
-            "ico_cat3.gif",
-            "ico_caw.gif",
-            "ico_elephant.gif",
-            "ico_flog.gif",
-            "ico_ganesha.gif",
-            "ico_panda.gif",
-            "ico_pig.gif",
-            "ico_rhino.gif",
-            "ico_whole1.gif",
-            "ico_whole2.gif"
-        ];
 
     </script>
 </body>
