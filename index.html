@@ -15,13 +15,94 @@
     <link rel="stylesheet" href="css/stylesheet.css"/>
 </head>
 <body>
-    <h1>DevHubIcon</h1>
-    <canvas class="canv" width="24" height="24"></canvas>
+    <div id="main">
+        <h1>Hubbatar</h1>
+        <canvas class="canv" width="24" height="24"></canvas>
+        <p>
+            Name: <input type="text" v-model="iconText"/>
+        </p>
+        <p>
+            BG: <input type="text" v-model="bgColor"/>
+        </p>
+        <p>
+            Font: <input type="text" v-model="fontColor"/>
+        </p>
+
+        <p>{{message}}</p>
+
+    </div>
+
 
 
 
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/vue/dist/vue.js"></script>
     <script>
+
+
+
+        var app = new Vue({
+            el: "#main",
+            data: {
+                iconText: "Taro",
+                bgColor: "green",
+                fontColor: "black"
+            },
+            ready:function(){
+                var self = this;
+
+                function draw(){
+                    var canvas = $('canvas')[0];
+                    var ctx = canvas.getContext('2d');
+                    ctx.fillStyle = self.bgColor;
+                    ctx.fillRect(0,0,24,24);
+                    ctx.font = "12pt 'kakomibregular'";
+                    ctx.fillStyle = self.fontColor;
+                    ctx.textAlign = "left";
+                    ctx.fillText(self.iconText, 2, 22, 24);
+                }
+
+                //描画を試行する
+                //リトライ回数
+                var cnt = 0;
+                function tryDraw(){
+                    if(!loaded() && cnt<30){
+                        setTimeout(tryDraw, 100);
+                        cnt++;
+                    }else{
+                        draw();
+                    }
+                }
+
+                //webフォントのロード状況を確認する
+                var c1 = document.createElement("canvas");
+                var c2 = c1.cloneNode(false);
+                var ctx1 = c1.getContext("2d");
+                var ctx2 = c2.getContext("2d");
+                //webフォントと代替フォントとを指定．
+                //NOTE:monoscopeだとwebkitでリロード時に失敗する
+                ctx1.font = "normal 10px 'kakomibregular', serif";
+                ctx2.font = "normal 10px serif";
+                var text = "this is test text.";
+                function loaded(){
+                    //テキスト幅を比較する
+                    //webフォントが利用可能となると，フォント幅が一致する．
+                    var tm1 = ctx1.measureText(text);
+                    var tm2 = ctx2.measureText(text);
+                    return tm1.width != tm2.width;
+                }
+
+
+                //処理開始
+                tryDraw();
+
+                this.$watch("iconText", function(){
+                    draw();
+                });
+
+            }
+        });
+
         var icons = [
             "ico_bear.gif",
             "ico_cat1.gif",
@@ -38,51 +119,6 @@
             "ico_whole2.gif"
         ];
 
-        window.onload = function(){
-            //描画を試行する
-            //リトライ回数
-            var cnt = 0;
-            function tryDraw(){
-                if(!loaded() && cnt<30){
-                    setTimeout(tryDraw, 100);
-                    cnt++;
-                }else{
-                    draw();
-                }
-            }
-
-            //webフォントのロード状況を確認する
-            var c1 = document.createElement("canvas");
-            var c2 = c1.cloneNode(false);
-            var ctx1 = c1.getContext("2d");
-            var ctx2 = c2.getContext("2d");
-            //webフォントと代替フォントとを指定．
-            //NOTE:monoscopeだとwebkitでリロード時に失敗する
-            ctx1.font = "normal 10px 'kakomibregular', serif";
-            ctx2.font = "normal 10px serif";
-            var text = "this is test text.";
-            function loaded(){
-                //テキスト幅を比較する
-                //webフォントが利用可能となると，フォント幅が一致する．
-                var tm1 = ctx1.measureText(text);
-                var tm2 = ctx2.measureText(text);
-                return tm1.width != tm2.width;
-            }
-
-            //実際の描画処理を行う
-            function draw(){
-                var canvas = $('canvas')[0];
-                var ctx = canvas.getContext('2d');
-                ctx.font = "12pt 'kakomibregular'";
-                ctx.fillStyle = "black";
-                ctx.textAlign = "center";
-                ctx.fillText("ABCD", 12, 10, 24);
-                document.body.appendChild(canvas);
-            }
-
-            //処理開始
-            tryDraw();
-        };
     </script>
 </body>
 </html>
