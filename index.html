@@ -62,6 +62,10 @@
             </select>
         </p>
 
+        <p>
+            <a href="#" class="button" id="btn-download" download="devhub-icon.png">Download</a>
+        </p>
+
 
     </div>
 
@@ -128,6 +132,9 @@
 
                             ctx.textAlign = "left";
                             ctx.fillText(self.iconText, 2, 22, 24);
+                            var dataURL = canvas.toDataURL('image/png');
+                            var button = document.getElementById('btn-download');
+                            button.href = dataURL;
 
                         });
                     }else{
@@ -142,8 +149,10 @@
 
                         ctx.textAlign = "left";
                         ctx.fillText(self.iconText, 2, 22, 24);
+                        var dataURL = canvas.toDataURL('image/png');
+                        var button = document.getElementById('btn-download');
+                        button.href = dataURL;
                     }
-
                 }
 
                 //描画を試行する
