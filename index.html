@@ -17,6 +17,7 @@
             border-radius: 5px;
         }
         h1{
+            color: #5f9d00;
             margin: 0;
             padding: 0;
         }
@@ -39,14 +40,14 @@
             Name: <input type="text" v-model="iconText"/>
         </p>
         <p>
-            BG: <input type="text" v-model="bgColor"/>
+            BG: <input type="color" v-model="bgColor"/>
         </p>
         <p>
-            Font: <input type="text" v-model="fontColor"/>
+            Font: <input type="color" v-model="fontColor"/>
         </p>
 
         <p>
-            <select v-model="shadowColor">
+            ShadowColor: <select v-model="shadowColor">
                 <option value="black">black</option>
                 <option value="white">white</option>
             </select>
@@ -189,6 +190,9 @@
                     draw();
                 });
                 this.$watch("icon", function(){
+                    draw();
+                });
+                this.$watch("shadowColor", function(){
                     draw();
                 });
 
